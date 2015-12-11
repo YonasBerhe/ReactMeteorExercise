@@ -1,5 +1,10 @@
 Task = React.createClass({
     propTypes: {
-      task: React
+      task: React.PropTypes.object.isRequired
+    },
+    render(){
+      return (
+        <li>{this.props.task.text}</li>
+      );
     }
 });
