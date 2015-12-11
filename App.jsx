@@ -1,19 +1,14 @@
 App = React.createClass({
-  getTasks() {
-    return [
-      {
-        _id: 1,
-        text: "This is task 1"
-      }, {
-        _id: 2,
-        text: "This is task 2"
-      }, {
-        _id: 3,
-        text: "This is task 3"
-      }
-    ];
-  }
-}),
+
+mixins: [ReactMeteorData],
+
+
+
+  getMeteorData() {
+    return {
+      tasks: Task.find({}).fetch()
+    };
+  },
 
 renderTask () {
   return this.getTasks().map((task) => {
@@ -35,5 +30,6 @@ render () {
       </ul>
     </div>
 
-  )
+  );
 }
+});
