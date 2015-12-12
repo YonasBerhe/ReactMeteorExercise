@@ -12,6 +12,18 @@ App = React.createClass({
     });
   },
 
+  handleSubmit(event) {
+    event.preventDefault();
+    var text = React.findDOMNode(this.refs.textInput).value.trim();
+
+    // reffering to the mongo db tasks in the file simple todos react.js file
+    Tasks.insert({
+      text: text,
+      createdAt: new Date()
+    });
+
+  }
+
   render() {
     return (
       <div className="container">
