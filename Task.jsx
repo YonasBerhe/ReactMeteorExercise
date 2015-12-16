@@ -35,8 +35,7 @@ const taskClassName = this.props.task.checked ? "checked" : "";
           readOnly={true}
           checked={this.props.task.checked}
           onClick={this.toggleChecked} />
-
-        <span className="text"> {this.props.task.text}</span>
+        <span className="text"> {this.props.task.username}</span>: {this.props.task.text}
       </li>
     );
   }

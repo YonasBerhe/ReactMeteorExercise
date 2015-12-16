@@ -2,13 +2,28 @@ App = React.createClass({
 
   mixins: [ReactMeteorData],
 
-  getMeteorData() {
-    return {tasks: Tasks.find({}, {
-        sort: {
-          createdAt: -1
-        }
-      }).fetch()}
-  },
+
+getIntialState() {
+      return {
+
+          hideCompleted: false
+      };
+    },
+
+
+    getMeteorData() {
+      let query = {};
+
+        // If hide completed is checked, filter tasks
+        query = {checked: {$ne: true}};
+
+      return {
+        tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch(),
+        incompleteCount: Tasks.find({checked: {$ne: true}}).count(),
+        currentUser: Meteor.user()
+      };
+    },
+
 
   renderTasks() {
     return this.data.tasks.map((task) => {
@@ -20,7 +35,12 @@ App = React.createClass({
     event.preventDefault();
     var text = React.findDOMNode(this.refs.textInput).value.trim();
 
-    Tasks.insert({text: text, createdAt: new Date()});
+    Tasks.insert({
+      text: text,
+       createdAt: new Date(),
+       owner: Meteor.userId(),
+       username: Meteor.user(),username
+     });
 
     React.findDOMNode(this.refs.textInput).value = "";
   },
@@ -35,7 +55,6 @@ App = React.createClass({
             <input
               type="checkbox"
               readOnly={true}
-              checked={this.state.hide-completed}
               onClick={this.toggleHideCompleted} />
             Hide Completed Tasks
           </label>
@@ -44,9 +63,17 @@ App = React.createClass({
             {this.renderTasks()}
           </ul>
         </div>
-        <form className="new-Task" onSubmit={this.handleSubmit}>
-          <input type="text" ref="textInput" placeholder="Type to add new tasks"/>
-        </form>
+
+        <AccountsUIWrapper />
+      {this.data.currentUser ?
+        <form className="new-task" onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            ref="textInput"
+            placeholder="New Task" />
+        </form>: ''
+
+      }
       </header>
     );
   }
