@@ -35,13 +35,15 @@ getIntialState() {
     event.preventDefault();
     var text = React.findDOMNode(this.refs.textInput).value.trim();
 
-    Tasks.insert({
-      text: text,
-       createdAt: new Date(),
-       owner: Meteor.userId(),
-       username: Meteor.user(),username
-     });
+    // Tasks.insert({
+    //   text: text,
+    //    createdAt: new Date(),
+    //    owner: Meteor.userId(),
+    //    username: Meteor.user(),username
+    //  });
 
+
+    Meteor.call("addTask", text);
     React.findDOMNode(this.refs.textInput).value = "";
   },
 
