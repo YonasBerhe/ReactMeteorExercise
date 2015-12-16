@@ -3,7 +3,8 @@ Task = React.createClass({
   propTypes: {
     // This component gets the task to display through a React prop.
     // We can use propTypes to indicate it is required
-    task: React.PropTypes.object.isRequired
+    task: React.PropTypes.object.isRequired,
+    showPrivateButton: React.PropTypes.bool.isRequired
   },
 
 toggleChecked() {
@@ -16,14 +17,14 @@ deleteThisTask() {
 
 },
 
+togglePrivate() {
+  Meteor.call("setPrivate", this.props.task._id, ! this.props.task.private);
+},
+
+render() {
 
 
-
-
-  render() {
-
-
-const taskClassName = this.props.task.checked ? "checked" : "";
+const taskClassName = this.props.task.checked ? "checked" : "" + " " + (this.props.task.private ? "private" : "");
     return (
       <li className={taskClassName}>
         <button clasName="delete" onClick={this.deleteThisTask}>
@@ -35,6 +36,15 @@ const taskClassName = this.props.task.checked ? "checked" : "";
           readOnly={true}
           checked={this.props.task.checked}
           onClick={this.toggleChecked} />
+
+
+        {this.props.showPrivateButton ? (
+          <button clasName="toggle-private" onClick={this.togglePrivate}>
+            {this.props.task.private ? "Private" : "Public"}
+          </button>
+        ): '' }
+
+        )}
         <span className="text"> {this.props.task.username}</span>: {this.props.task.text}
       </li>
     );
